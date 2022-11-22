@@ -1,14 +1,12 @@
 import React from "react";
-import FormHeader from "./Components/FormHeader";
-import CenterTabs from "./Components/CenterTabs";
-import Questions_Form from "./Components/Questions_Form";
+
+import UserAuthentication from "./Components/UserAuthentication";
 
 function App() {
   return (
     <div className="app">
-      <FormHeader/>
-      <CenterTabs/>
-      <Questions_Form/>
+      <UserAuthentication/>
+     
     </div>
   );
 }

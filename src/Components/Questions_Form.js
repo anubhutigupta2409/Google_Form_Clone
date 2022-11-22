@@ -1,4 +1,4 @@
-import React ,{useState, useEffect} from 'react';
+import React ,{useState, useEffect, useParams} from 'react';
 
 import  CropOriginalIcon  from '@material-ui/icons/CropOriginal';
 import  Select  from '@material-ui/core/Select';
@@ -26,13 +26,23 @@ import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import FaApple from "react-icons/fa"
 
+import UserAuthentication from './UserAuthentication';
+
 
 import "./Questions_Form.css"
+import axios from 'axios';
+import FormHeader from './FormHeader';
+import CenterTabs from './CenterTabs';
+import EditButton from './EditButton';
+import User_form from './user_form';
+
 
 
 function Questions_Form() {
 
+   
     const[image, setImage] = useState();
+    const [active, setActive] = useState("admin");
     const[questions, setQuestions] = useState(
         [
             {
@@ -47,6 +57,21 @@ function Questions_Form() {
         ]
 
     )
+    
+    const[documentName, setDocName] = useState("Untitled Document");
+    const[documentDescription, setDocDesc] = useState("Add Description");
+    
+    React.useEffect(()=>{
+        const data = localStorage.getItem("my_questions");
+        if(data){
+            setQuestions(JSON.parse(data));
+        }
+    },[]);
+
+    React.useEffect(()=>{
+        localStorage.setItem("my_questions", JSON.stringify(questions));
+    });
+
         function changeQuestion(text,i)
         {
             var newQuestion = [...questions];
@@ -141,6 +166,24 @@ function Questions_Form() {
             setImage(URL.createObjectURL(files[0]));
         }
 
+       
+
+        function saveQues()
+        {
+         
+            setActive("user");
+        }
+
+        function editForm()
+        {
+            setActive("admin");
+        }
+
+        function saveQuesExit()
+        {
+            setActive("login");
+        }
+
         function questionsUI()
         {  
             
@@ -149,46 +192,7 @@ function Questions_Form() {
                     <Accordion expanded={questions.open} className={questions[i].open ? 'add_border' : ""}>
                       
 
-                          
-                        {/* <AccordionSummary 
-                            aria-controls='panel1a-content'
-                            id="panel1a-header"
-                            elevation={1} style={{width:'100%'}}>
-
-                            {
-                                questions[i].open ? (
-                                    <div className='saved_questions'>
-                                       
-                                       <Typography style={{fontSize:"15px", fontWeight:"400", letterSpacing:'.1px',lineHeight:"24px",paddingBottom:"8px" }}>
-                                            {i+1}.{questions[i].questionText}
-                                        </Typography>
-
-                                        {ques.options.map((op,j) => (
-
-                                            <div key={j}>
-                                                <div style={{display:"flex",}}>
-                                                    <FormControlLabel style={{marginLeft:"5px", marginBottom:"5px"}} disabled control={<input type={ques.questionType}
-                                                    color="primary" style={{marginRight:"3px",}} required={ques.type}/>} label={
-                                                        <Typography style={{fontSize:"13px",
-                                                        fontWeight:"400",
-                                                        letterSpacing:".2px",
-                                                        lineHeight:"20px",
-                                                        color:"#202124"}}>
-                                                            {ques.options[j].optionText}
-                                                        </Typography>
-                                                    }/>
-                                                   
-                                                </div>
-                                            </div>
-                                        )
-
-                                        )
-
-                                        }
-                                    </div>
-                                ):""}
-
-                        </AccordionSummary> */}
+                    
                         <div className='question_boxes'>
                             <AccordionDetails className='add_question'>
                                 <div className='add_question_top'>
@@ -277,21 +281,47 @@ function Questions_Form() {
 
         return (
             <div>
-
+                { active === "admin" &&
+                 <div>
+                <FormHeader/>
+                <CenterTabs/>
+                
                 <div className='question_form'>
                     <br></br>
                     <div className='section'>
                         <div className='question_title_section'>
                             <div className='question_form_top'>
-                                <input type="text" className='question_form_top_name' style={{color:"black"}} placeholder="Untitled Document"/>
-                                <input type="text" className='question_form_top_desc' style={{color:"black"}} placeholder="Form Description"/>
+                                <input type="text" className='question_form_top_name' style={{color:"black"}} placeholder="Untitled Document" onChange={(e)=>{setDocName(e.target.value)}}/>
+                                <input type="text" className='question_form_top_desc' style={{color:"black"}} placeholder="Form Description" onChange={(e)=>{setDocDesc(e.target.value)}}/>
                             </div>
                         </div>
 
                         {questionsUI()}
+
+                        <div className='save_form'>
+                            <Button variant="contained" color="primary" onClick={saveQues} style={{fontSize:"14px" ,marginRight:"10px"}}>Save</Button>
+                            <Button variant="contained" color="primary" onClick={saveQuesExit} style={{fontSize:"14px"}}>Save & Exit</Button>
+                        </div>
                     </div>
                 </div>
+            
+                </div>
+            }
+
+            { active === "user"
+            &&
+                <div>
+                <Button variant="contained" color="primary" onClick={editForm} style={{fontSize:"14px"}}>Edit</Button>
+                <User_form questions={questions} ques_desc={documentDescription} ques_name={documentName}/>
+                </div>
                 
+            } 
+
+            {
+                active === "login"
+                &&
+                <UserAuthentication questions={questions} ques_desc={documentDescription} ques_name={documentName}/>
+            }
             </div>
         );
     
