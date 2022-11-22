@@ -1,6 +1,9 @@
 import React, { useState} from "react";
 import Questions_Form from "./Questions_Form";
 import User_form from "./user_form";
+import "./UserAuthentication.css"
+import { Button } from "@material-ui/core";
+
 
 
 
@@ -31,26 +34,29 @@ const UserAuthentication = (props) => {
         {
             active === "form"
             &&
-            <div>
-      <form >
-        <label htmlFor="username">Username: </label>
+            <div className="page">
+      <form className="cover">
+        <h1>Login</h1>
+       
         <input
           type="text"
           value={username}
-          placeholder="enter a username"
+          placeholder="Enter Username"
           onChange={(e)=>{setUsername(e.target.value)}}
           
         />
-        <div>
-          <label htmlFor="password">password: </label>
+        
+         
           <input
             type="password"
             value={password}
-            placeholder="enter a password"
+            placeholder="Enter Password"
             onChange={(e)=>{setPassword(e.target.value)}}
           />
-        </div>
-        <button type="submit" onClick={handleSubmit}>Login</button>
+        
+        <Button  variant="contained" color="primary"  onClick={handleSubmit} style={{fontSize:"14px", width:"80%"}}>Login</Button>
+
+        
       </form>
       </div>
     }
