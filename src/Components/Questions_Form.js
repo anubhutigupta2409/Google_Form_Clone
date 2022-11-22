@@ -24,6 +24,7 @@ import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
+import FaApple from "react-icons/fa"
 
 
 import "./Questions_Form.css"
@@ -31,6 +32,7 @@ import "./Questions_Form.css"
 
 function Questions_Form() {
 
+    const[image, setImage] = useState();
     const[questions, setQuestions] = useState(
         [
             {
@@ -131,8 +133,14 @@ function Questions_Form() {
             setQuestions([...questions, newlyAddedQuestion]);
         }
 
-       
-  
+        
+        
+        function myHandler(files) {
+
+            console.log(files[0]);
+            setImage(URL.createObjectURL(files[0]));
+        }
+
         function questionsUI()
         {  
             
@@ -185,7 +193,8 @@ function Questions_Form() {
                             <AccordionDetails className='add_question'>
                                 <div className='add_question_top'>
                                     <input type="text" className="question"  placeholder='Untitled Question' value={ques.questionText} onChange={(e)=>{changeQuestion(e.target.value,i)}}/>
-                                    <CropOriginalIcon style={{color:"#5f6368"}}/>
+                                    <IconButton ><CropOriginalIcon style={{color:"#5f6368"}} /></IconButton>
+                                    
                                     <Select className='select' style={{color:"#5f6368", fontSize:"13px"}}>
                                         <MenuItem id="text" value="Text" onClick={()=>{addQuestionType(i,"text")}}>Paragraph</MenuItem>
                                         <MenuItem id="shortText" value="Text" onClick={()=>{addQuestionType(i,"text")}}>Short Text</MenuItem>
@@ -194,6 +203,8 @@ function Questions_Form() {
                                         <MenuItem id="radio" value="Radio" checked onClick={()=>{addQuestionType(i,"radio")}}>Multiple Choice</MenuItem>
                                     </Select>
                                 </div>
+                                <input type="file" onChange={(e)=>{myHandler(e.target.files)}} className="image" />
+                                <img src={image} />
 
                         {
                             ques.options.map((op,j)=> (
