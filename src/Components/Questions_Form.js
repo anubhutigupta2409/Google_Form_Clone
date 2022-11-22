@@ -48,6 +48,7 @@ function Questions_Form() {
             {
                 questionText : "Untitled Question",
                 questionType : "radio",
+                questionTypeName : "radio",
                 options : [
                     {optionText : "Option 1"}
                 ],
@@ -88,11 +89,12 @@ function Questions_Form() {
             console.log(optionsQuestion);
         }
 
-        function addQuestionType(i,type)
+        function addQuestionType(i,type,typeName)
         {
             let qs = [...questions];
             console.log(type);
             qs[i].questionType = type;
+            qs[i].questionTypeName = typeName;
             setQuestions(qs);
         }
 
@@ -148,6 +150,7 @@ function Questions_Form() {
          
             newlyAddedQuestion.questionText = "Untitled Question";
             newlyAddedQuestion.questionType = "radio";
+            newlyAddedQuestion.questionTypeName = "radio";
             newlyAddedQuestion.options=[
                 {optionText : "Option 1"}
             ];
@@ -200,11 +203,14 @@ function Questions_Form() {
                                     <IconButton ><CropOriginalIcon style={{color:"#5f6368"}} /></IconButton>
                                     
                                     <Select className='select' style={{color:"#5f6368", fontSize:"13px"}}>
-                                        <MenuItem id="text" value="Text" onClick={()=>{addQuestionType(i,"text")}}>Paragraph</MenuItem>
-                                        <MenuItem id="shortText" value="Text" onClick={()=>{addQuestionType(i,"text")}}>Short Text</MenuItem>
-                                        <MenuItem id="number" value="Number" onClick={()=>{addQuestionType(i,"number")}}>Number</MenuItem>
-                                        <MenuItem id="checkbox" value="Checkbox" checked onClick={()=>{addQuestionType(i,"checkbox")}}>CheckBox</MenuItem>
-                                        <MenuItem id="radio" value="Radio" checked onClick={()=>{addQuestionType(i,"radio")}}>Multiple Choice</MenuItem>
+                                        <MenuItem id="text" value="Text" onClick={()=>{addQuestionType(i,"text","text")}}>Paragraph</MenuItem>
+                                        <MenuItem id="shortText" value="Text" onClick={()=>{addQuestionType(i,"text","text")}}>Short Text</MenuItem>
+                                        <MenuItem id="number" value="Number" onClick={()=>{addQuestionType(i,"number","number")}}>Number</MenuItem>
+                                        <MenuItem id="checkbox" value="Checkbox" checked onClick={()=>{addQuestionType(i,"checkbox","checkbox")}}>CheckBox</MenuItem>
+                                        <MenuItem id="radio" value="Radio" checked onClick={()=>{addQuestionType(i,"radio","radio")}}>Multiple Choice</MenuItem>
+                                        <MenuItem id="date" value="Date" checked onClick={()=>{addQuestionType(i,"date","date")}}>Date</MenuItem>
+                                        <MenuItem id="dob" value="DOB" checked onClick={()=>{addQuestionType(i,"date","dob")}}>DOB</MenuItem>
+                                        
                                     </Select>
                                 </div>
                                 <input type="file" onChange={(e)=>{myHandler(e.target.files)}} className="image" />
@@ -320,7 +326,8 @@ function Questions_Form() {
             {
                 active === "login"
                 &&
-                <UserAuthentication questions={questions} ques_desc={documentDescription} ques_name={documentName}/>
+               
+                <UserAuthentication questions={questions} doc_desc={documentDescription} doc_name={documentName}/>
             }
             </div>
         );

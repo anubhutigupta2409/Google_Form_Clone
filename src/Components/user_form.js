@@ -2,6 +2,7 @@ import { Button, Typography } from '@material-ui/core'
 import React ,{useState,useEffect} from 'react'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
+import Confetti from './Confetti';
 
 
 
@@ -15,24 +16,56 @@ function User_form(props) {
     const doc_desc = props.doc_desc
     const doc_name = props.doc_name
 
-    //doc name, doc desc from questions form
-    //questions from Question form
+    const [date,setDate] = useState();
+    const [active,setActive] = useState("false")
+
+    //for debugging purposes
+    //if(props.questions.questionTypeName==="dob")
+       // console.log(questions[0].questionTypeName);
+
+    var today = new Date();
+   
+
+    function selectcheck(Check)
+    {
+        console.log(Check);
+    } 
+
+    function selectinput(Input)
+    {
+        console.log(Input);
+    }
+
+    function select(Select)
+    {
+        console.log(Select);
+    }
+
+    function selectDateValue(Date_Value)
+    {   
+        setDate(Date_Value)
+        
+        var dateString = Date_Value.toString();
+        
+        if(today.getDate()===Number(dateString.slice(8,10)) && (today.getMonth()+1)===Number(dateString.slice(5,7)))
+            setActive("true");
+      
+        
+    }
+
+    for(let i=0;i<questions.length;i++)
+        if(questions[i].questionTypeName=="dob")
+            console.log("yes")
 
 
-  
+    return ( 
 
-  
-
-
-
-
-
-
-
-
-    return (  
       <div className="submit">
+        {
         <div className="user_form">
+            
+            {active==="true" && <Confetti />}
+            
             <div className="user_form_section">
                 <div className="user_title_section">
                     <Typography style={{fontSize:"26px"}} >{doc_name}</Typography>
@@ -52,7 +85,8 @@ function User_form(props) {
                                   <div className="form-check">
                                     
                                       {
-
+                                     
+                                       question.questionType != "date" ? (
                                         question.questionType != "radio" ? (  
                                           question.questionType != 'text' ? (
                                         <label>
@@ -64,7 +98,7 @@ function User_form(props) {
                                         className="form-check-input"
                                         required={question.required}
                                         style={{margnLeft:"5px",marginRight:"5px"}}
-                                       
+                                        onChange={(e)=>{selectcheck(e.target.checked)}}
                                         /> {ques.optionText}
                                         </label>): (
 
@@ -77,7 +111,7 @@ function User_form(props) {
                                         className="form-check-input"
                                         required={question.required}
                                         style={{margnLeft:"5px",marginRight:"5px"}}
-                                       
+                                        onChange={(e)=>{selectinput(e.target.value)}}
                                         /> {ques.optionText}
                                         </label>
                                         )
@@ -93,10 +127,26 @@ function User_form(props) {
                                             className="form-check-input"
                                             required={question.required}
                                             style={{margnLeft:"5px",marginRight:"5px"}}
-                                           
+                                            onChange={(e)=>{select(e.target.value)}}
                                           />
                                       {ques.optionText}
                                         </label>)
+                                       ) :(<label>
+                                        <input
+                                          
+                                          type={question.questionType}
+                                          name={qindex}
+                                          
+                                          className="form-check-input"
+                                          required={question.required}
+                                          style={{margnLeft:"5px",marginRight:"5px"}}
+                                          onChange={(e)=>{selectDateValue(e.target.value)}}
+                                          value={date}
+                                        />
+                                    {ques.optionText}
+                                      </label>
+                                        
+                                       )
 
                                       }
                                   
@@ -120,7 +170,8 @@ function User_form(props) {
             </div>
             </div>
             
-        </div>
+        </div>  
+        }
         </div>
     )
 }
