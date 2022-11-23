@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# Google Form Clone
+
+The following is a clone of the Google Forms, with the following deliverables  
+
+*Basic authentication mechanism to keep the editor of the form separate from the one filling the form.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
