@@ -2,7 +2,11 @@
 
 The following is a clone of the Google Forms, with the following deliverables  
 
-*Basic authentication mechanism to keep the editor of the form separate from the one filling the form.
+1. Basic authentication mechanism to keep the editor of the form separate from the one filling the form.
+2. Multiple kinds of questions like MCQ, long text, short text, number.
+3. Blocks of text or paragraphs.
+4. Image support.
+5. Additionally think one feature that does not exist in Microsoft Forms or Google Forms and implement that as well. 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
