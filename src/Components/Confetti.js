@@ -4,7 +4,9 @@ import ReactConfetti from 'react-confetti';
 function Confetti() {
 
         const [windowDimension, setWindowDimension] = useState({width : window.innerWidth, height : window.innerHeight});
-    
+        
+
+
         const detectSize = () =>{
 
             setWindowDimension({
@@ -17,12 +19,18 @@ function Confetti() {
 
             window.addEventListener('resize', detectSize);
 
+
             return () =>{
                 window.removeEventListener('resize', detectSize);
             }
         },[windowDimension]);
 
+        
+
         return (
+            
+          
+               
             <div>
                 <ReactConfetti
                 width={windowDimension.width}
@@ -30,6 +38,7 @@ function Confetti() {
                 tweenDuration={1000}
                 />
             </div>
+            
         );
     
 }

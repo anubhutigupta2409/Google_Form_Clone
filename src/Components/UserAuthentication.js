@@ -15,13 +15,15 @@ const UserAuthentication = (props) => {
 
 
 
+
  
   function handleSubmit()
   {
         console.log(username);
         console.log(password);
 
-        if(username === "admin")
+        //fixed an admin, as of now
+        if(username === "admin" && password === "password")
             setActive("admin");
         else
             setActive('user');
@@ -38,7 +40,7 @@ const UserAuthentication = (props) => {
       <form className="cover">
         <h1>Login</h1>
        
-        <input
+        <input className="auth"
           type="text"
           value={username}
           placeholder="Enter Username"
@@ -47,7 +49,7 @@ const UserAuthentication = (props) => {
         />
         
          
-          <input
+          <input className="auth"
             type="password"
             value={password}
             placeholder="Enter Password"

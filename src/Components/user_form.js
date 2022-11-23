@@ -1,7 +1,5 @@
 import { Button, Typography } from '@material-ui/core'
 import React ,{useState,useEffect} from 'react'
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
 import Confetti from './Confetti';
 
 
@@ -19,12 +17,12 @@ function User_form(props) {
     const [date,setDate] = useState();
     const [active,setActive] = useState("false")
 
-    //for debugging purposes
-    //if(props.questions.questionTypeName==="dob")
-       // console.log(questions[0].questionTypeName);
 
     var today = new Date();
+
+    console.log(doc_name);
    
+    //the following functions can be instanciated when backend is added to the project, to record user responses
 
     function selectcheck(Check)
     {
@@ -41,6 +39,8 @@ function User_form(props) {
         console.log(Select);
     }
 
+
+    //function for extra feauture, of showing a confetti screen, if user's birth date is same as today's date
     function selectDateValue(Date_Value)
     {   
         setDate(Date_Value)
@@ -53,6 +53,7 @@ function User_form(props) {
         
     }
 
+    //for debugging purposes
     for(let i=0;i<questions.length;i++)
         if(questions[i].questionTypeName=="dob")
             console.log("yes")
@@ -73,6 +74,7 @@ function User_form(props) {
 
                 </div>
               
+                {/* mapping of type questions along with type of input, to be displayed in userform */}
                 {
                 questions.map((question,qindex)=>(
                     <div className="user_form_questions">
@@ -128,7 +130,7 @@ function User_form(props) {
                                             required={question.required}
                                             style={{margnLeft:"5px",marginRight:"5px"}}
                                             onChange={(e)=>{select(e.target.value)}}
-                                          />
+                                          /><img src={props.image} />
                                       {ques.optionText}
                                         </label>)
                                        ) :(<label>
@@ -142,14 +144,14 @@ function User_form(props) {
                                           style={{margnLeft:"5px",marginRight:"5px"}}
                                           onChange={(e)=>{selectDateValue(e.target.value)}}
                                           value={date}
-                                        />
+                                        /><img className="photo" src={props.image}/>
                                     {ques.optionText}
                                       </label>
                                         
                                        )
-
+                                       
                                       }
-                                  
+                                   
                                   </div>
                                   </div>
                                 </div>
@@ -160,6 +162,7 @@ function User_form(props) {
                 
                 }         
                  
+            {/* The submit button will be functional once recording user responses functionality is done */}
             <div className="user_form_submit">
             <Button  variant="contained" color="primary"  style={{fontSize:"14px"}}>Submit</Button>
 

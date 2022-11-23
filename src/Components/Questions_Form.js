@@ -3,38 +3,24 @@ import React ,{useState, useEffect, useParams} from 'react';
 import  CropOriginalIcon  from '@material-ui/icons/CropOriginal';
 import  Select  from '@material-ui/core/Select';
 import  Switch  from '@material-ui/core/Switch';
-import CheckBoxIcon from "@material-ui/icons/CheckBox"
 import  ShortTextIcon  from '@material-ui/icons/ShortText';
-import  SubjectIcon  from '@material-ui/icons/Subject';
 import  MoreVertIcon  from '@material-ui/icons/MoreVert';
 import {BsTrash} from "react-icons/bs"
 import { IconButton } from '@material-ui/core';
 import  FilterNoneIcon  from '@material-ui/icons/FilterNone';
 import  AddCircleOutlineIcon  from '@material-ui/icons/AddCircleOutline';
-import  OndemandVideoIcon  from '@material-ui/icons/OndemandVideo';
-import TextFieldsIcon from '@material-ui/icons/TextFields';
-import {BsFileText} from "react-icons/bs"
 import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Button from '@material-ui/core/Button';
-import {FcRightUp} from "react-icons/fc"
 import  CloseIcon  from '@material-ui/icons/Close';
-import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
-import FaApple from "react-icons/fa"
-
 import UserAuthentication from './UserAuthentication';
-
-
 import "./Questions_Form.css"
-import axios from 'axios';
 import FormHeader from './FormHeader';
 import CenterTabs from './CenterTabs';
-import EditButton from './EditButton';
 import User_form from './user_form';
+
 
 
 
@@ -43,6 +29,9 @@ function Questions_Form() {
    
     const[image, setImage] = useState();
     const [active, setActive] = useState("admin");
+    const[documentName, setDocName] = useState("Untitled Document");
+    const[documentDescription, setDocDesc] = useState("No Description");
+
     const[questions, setQuestions] = useState(
         [
             {
@@ -53,15 +42,25 @@ function Questions_Form() {
                     {optionText : "Option 1"}
                 ],
                 open : true,
-                required : false
+                required : false,
+                photo : File
             }
         ]
 
     )
     
-    const[documentName, setDocName] = useState("Untitled Document");
-    const[documentDescription, setDocDesc] = useState("Add Description");
     
+
+    console.log(documentName);
+    console.log(documentDescription);
+
+    useEffect(() => {
+        setDocDesc(JSON.parse(window.localStorage.getItem('documentDescription')));
+        setDocName(JSON.parse(window.localStorage.getItem('documentName')));
+      }, []);
+
+
+    //persist list of questions
     React.useEffect(()=>{
         const data = localStorage.getItem("my_questions");
         if(data){
@@ -69,10 +68,12 @@ function Questions_Form() {
         }
     },[]);
 
+    
     React.useEffect(()=>{
         localStorage.setItem("my_questions", JSON.stringify(questions));
     });
 
+        //question text change
         function changeQuestion(text,i)
         {
             var newQuestion = [...questions];
@@ -81,6 +82,7 @@ function Questions_Form() {
             console.log(newQuestion);
         }
 
+        //question options' value change
         function changeOptionValue(text,i,j)
         {
             var optionsQuestion = [...questions];
@@ -89,6 +91,7 @@ function Questions_Form() {
             console.log(optionsQuestion);
         }
 
+        //question type
         function addQuestionType(i,type,typeName)
         {
             let qs = [...questions];
@@ -98,6 +101,7 @@ function Questions_Form() {
             setQuestions(qs);
         }
 
+        //removing a questions' option
         function removeOption(i,j)
         {
             var RemoveOptionQuestion= [...questions];
@@ -108,6 +112,7 @@ function Questions_Form() {
             }
         }
 
+        //adding an option
         function addOption(i)
         {
             var optionsOfQuestion = [...questions];
@@ -121,6 +126,7 @@ function Questions_Form() {
             setQuestions(optionsOfQuestion);
         }
 
+        //copying a question
         function copyQuestion(i)
         {
         
@@ -129,6 +135,7 @@ function Questions_Form() {
             setQuestions([...questions, newQuestion]);
         }
 
+        //deleting a question
         function deleteQuestion(i){
             let qs = [...questions];
             if(questions.length > 1){
@@ -137,6 +144,7 @@ function Questions_Form() {
             setQuestions(qs);
         }
 
+        //setting required
         function requiredQuestion(i)
         {
             var reqQuestion = [...questions];
@@ -145,6 +153,7 @@ function Questions_Form() {
             setQuestions(reqQuestion);
         }
 
+        //adding question
         function addMoreQuestionField(){
             var newlyAddedQuestion = [...questions];
          
@@ -162,31 +171,38 @@ function Questions_Form() {
         }
 
         
-        
-        function myHandler(files) {
+        //image support
+        function myHandler(files,i) {
 
-            console.log(files[0]);
+          
             setImage(URL.createObjectURL(files[0]));
+            let qs = [...questions];
+            qs[i].photo = image;
+            setQuestions(qs);
+            return qs[i].photo;
         }
 
        
-
+        //saving the form
         function saveQues()
         {
          
             setActive("user");
         }
 
+        //editing the form
         function editForm()
         {
             setActive("admin");
         }
 
+        //saving and exiting admin environment
         function saveQuesExit()
         {
             setActive("login");
         }
 
+        //questions UI mapping
         function questionsUI()
         {  
             
@@ -194,13 +210,13 @@ function Questions_Form() {
                 <div>
                     <Accordion expanded={questions.open} className={questions[i].open ? 'add_border' : ""}>
                       
-
-                    
                         <div className='question_boxes'>
                             <AccordionDetails className='add_question'>
                                 <div className='add_question_top'>
                                     <input type="text" className="question"  placeholder='Untitled Question' value={ques.questionText} onChange={(e)=>{changeQuestion(e.target.value,i)}}/>
-                                    <IconButton ><CropOriginalIcon style={{color:"#5f6368"}} /></IconButton>
+                                    <label for="image" ><CropOriginalIcon style={{color:"#5f6368"}} /></label>
+                                    <input id="image" type="file" onChange={(e)=>{myHandler(e.target.files,i)}} className="image" />
+
                                     
                                     <Select className='select' style={{color:"#5f6368", fontSize:"13px"}}>
                                         <MenuItem id="text" value="Text" onClick={()=>{addQuestionType(i,"text","text")}}>Paragraph</MenuItem>
@@ -211,15 +227,19 @@ function Questions_Form() {
                                         <MenuItem id="date" value="Date" checked onClick={()=>{addQuestionType(i,"date","date")}}>Date</MenuItem>
                                         <MenuItem id="dob" value="DOB" checked onClick={()=>{addQuestionType(i,"date","dob")}}>DOB</MenuItem>
                                         
+                                        
                                     </Select>
                                 </div>
-                                <input type="file" onChange={(e)=>{myHandler(e.target.files)}} className="image" />
+                                
+                               
+                                
                                 <img src={image} />
 
                         {
                             ques.options.map((op,j)=> (
 
                                 <div className='add_question_body' key={j}>
+                                    
                                     {
                                         (ques.questionType!="text" ) ?
                                         <input type={ques.questionType} style={{marginRight:"10px"}}/> :
@@ -228,9 +248,7 @@ function Questions_Form() {
                                     <div>
                                         <input type="text" className='text_input' placeholder='Option' value={ques.options[j].optionText} onChange={(e)=>{changeOptionValue(e.target.value,i,j)}}/>
                                     </div>
-                                    <IconButton>
-                                    <CropOriginalIcon style={{color:"#5f6368"}}/>
-                                    </IconButton>
+                                    
                                     <IconButton aria-label='delete'>
                                         <CloseIcon onClick={()=>{removeOption(i,j)}}/>
                                     </IconButton>
@@ -272,12 +290,7 @@ function Questions_Form() {
                         </div>
                     </div>
                             </AccordionDetails>
-                            <div className='question_edit'>
-                                <IconButton><AddCircleOutlineIcon onClick={addMoreQuestionField} className='edit'/></IconButton>
-                                <OndemandVideoIcon className='edit'/>
-                                <CropOriginalIcon className='edit'/>
-                                <TextFieldsIcon className='edit'/>
-                            </div>
+                            <IconButton><AddCircleOutlineIcon onClick={addMoreQuestionField}  className="question_edit"/></IconButton>
                             
                         </div>
                     </Accordion>
@@ -297,8 +310,8 @@ function Questions_Form() {
                     <div className='section'>
                         <div className='question_title_section'>
                             <div className='question_form_top'>
-                                <input type="text" className='question_form_top_name' style={{color:"black"}} placeholder="Untitled Document" onChange={(e)=>{setDocName(e.target.value)}}/>
-                                <input type="text" className='question_form_top_desc' style={{color:"black"}} placeholder="Form Description" onChange={(e)=>{setDocDesc(e.target.value)}}/>
+                               <input type="text" className='question_form_top_name' style={{color:"black"}} placeholder="Untitled Document" value={documentName} onChange={(e)=>{setDocName(e.target.value)}}/>
+                                <input type="text" className='question_form_top_desc' style={{color:"black"}} placeholder="Form Description" value={documentDescription} onChange={(e)=>{setDocDesc(e.target.value)}}/>
                             </div>
                         </div>
 
@@ -317,8 +330,8 @@ function Questions_Form() {
             { active === "user"
             &&
                 <div>
-                <Button variant="contained" color="primary" onClick={editForm} style={{fontSize:"14px"}}>Edit</Button>
-                <User_form questions={questions} ques_desc={documentDescription} ques_name={documentName}/>
+                <Button variant="contained" color="primary" onClick={editForm}  className="editButton" style={{fontSize:"14px" }}>Edit</Button>
+                <User_form questions={questions} doc_desc={documentDescription} doc_name={documentName} image={image}/>
                 </div>
                 
             } 
@@ -327,7 +340,7 @@ function Questions_Form() {
                 active === "login"
                 &&
                
-                <UserAuthentication questions={questions} doc_desc={documentDescription} doc_name={documentName}/>
+                <UserAuthentication questions={questions} doc_desc={documentDescription} doc_name={documentName} image={image}/>
             }
             </div>
         );

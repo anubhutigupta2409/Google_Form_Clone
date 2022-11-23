@@ -13,8 +13,8 @@
 
 .cover{
     background-color: white;
-    width: 30em;
-    height: 35em;
+    width: 20em;
+    height: 25em;
     position: relative;
     border-radius: 1em;
     box-shadow: 0 0.188em 1.550em rgb(156,156,156);
@@ -24,7 +24,7 @@
     justify-content: space-around;
 }
 
-input{
+.auth{
     border: none;
     background-color: #F4F4F9;
     height: 4em;
@@ -34,7 +34,7 @@ input{
     padding: 2em;
 }
 
-input:focus{
+.auth:focus{
     outline-color: rgb(103, 58, 183);
 }
 
