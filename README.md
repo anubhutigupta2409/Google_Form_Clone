@@ -8,7 +8,7 @@ The following is a clone of the Google Forms, with the following deliverables
 4. Image support.
 5. Additionally think one feature that does not exist in Microsoft Forms or Google Forms and implement that as well. 
 
-###About the extra Feature  
+## About the extra Feature  
 An extra input field called "DOB" is added, which helps in taking users' Date of Birth as input. Additionally, if user's birth date matches with the current date, a confetti animation is shown to the user to celebrate their birthday.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
